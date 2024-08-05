@@ -1,0 +1,114 @@
+<h2>Inventory</h2>
+<div class="d-flex flex-row bd-highlight mb-3">
+  <div *ngFor="let item of ingredients" class="p-2 bd-highlight">
+    <span [ngClass]="{'text-black-50': item.outOfStock}">
+      {{ item.name }}: {{ item.stock }}
+    </span>
+  </div>
+  <div class="p-2 bd-highlight">
+    <button
+        class="btn btn-outline-secondary btn-sm"
+        type="button"
+        (click)="restockMachine()">
+        Restock Machine
+      </button>
+  </div>
+</div>
+<div class="row" *ngIf="orderStep == 1">
+  <div class="col-6">
+    <h2>Begin Order Here</h2>
+    <br aria-hidden="true">
+    <button
+      class="btn btn-outline-success"
+      type="button"
+      (click)="startOrder()">
+      Start
+    </button>
+  </div>
+</div>
+<div class="row" *ngIf="orderStep == 2">
+  <div class="col-6">
+    <h2>Select a drink</h2>&nbsp;
+    <div *ngFor="let recipe of recipes">
+      <p [ngClass]="{'text-black-50': recipe.outOfStock}">
+        {{ recipe.name }}&nbsp;&nbsp;
+        ${{ recipe.cost}}&nbsp;&nbsp;
+        <button
+          class="btn btn-outline-success btn-sm"
+          type="button"
+          (click)="addToOrder(recipe.id)"
+          [attr.disabled]="recipe.outOfStock ? true : null">
+          Add
+        </button>
+        &nbsp;<span *ngIf="recipe.outOfStock">Out of Stock</span>
+      </p>
+    </div>
+    <hr aria-hidden="true">
+    <div *ngFor="let item of orderItems">
+      <span class="order-name">{{ item.name }}</span>
+      <span>${{ item.cost }}</span>
+    </div>
+    <div><strong>Total:</strong> {{ orderTotalFormatted }}</div>
+    <br aria-hidden="true">
+    <button
+      class="btn btn-primary"
+      type="button"
+      (click)="dispenseDrink()"
+      [attr.disabled]="orderItems.length == 0 ? true : null">
+      Dispense Drink
+    </button>
+    &nbsp;&nbsp;
+    <button
+      class="btn btn-outline-danger btn-sm"
+      type="button"
+      (click)="cancelOrder()">
+      Cancel Order
+    </button>
+  </div>
+</div>
+<div class="row" *ngIf="orderStep == 3">
+  <div class="col-6">
+    <button class="btn btn-primary" type="button" disabled>
+      <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+      Your drink is being dispensed
+    </button>
+  </div>
+</div>
+<div class="row" *ngIf="orderStep == 4">
+  <div class="col-6">
+    <div class="alert alert-success" role="alert">
+      Your drink has been dispensed. Thank you for your order.
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="orderStep == 0">
+  <div class="col-6">
+    <div class="alert alert-danger" role="alert">
+      There has been an error with your order
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="orderStep == 5">
+  <div class="col-6">
+    <div class="alert alert-warning" role="alert">
+      Your order has been canceled. Taking you back to the start...
+    </div>
+  </div>
+</div>
+<br aria-hidden="true">
+<!-- Object Arrays -->
+<br aria-hidden="true">
+<button type="button" class="btn btn-outline-info btn-sm" (click)="viewJson = !viewJson">Toggle JSON</button>
+<br aria-hidden="true">
+<br aria-hidden="true">
+<div class="row" *ngIf="viewJson">
+  <div class="col-4">
+    <pre>Recipes: {{ recipes | json }}</pre>
+  </div>
+  <div class="col-4">
+    <pre>Order Items: {{ orderItems | json }}</pre>
+  </div>
+  <div class="col-4">
+    <pre>Orders: {{ orders | json }}</pre>
+  </div>
+</div>
