@@ -6,11 +6,10 @@ import { Order, OrderItem } from '../../models/order';
 import { CommonModule, formatCurrency } from '@angular/common';
 
 @Component({
-  selector: 'app-order',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './order.component.html',
-  styleUrls: ['./order.component.scss']
+    selector: 'app-order',
+    imports: [CommonModule],
+    templateUrl: './order.component.html',
+    styleUrls: ['./order.component.scss']
 })
 export class OrderComponent implements OnInit {
   // #region // ---------- Properties ---------- //
