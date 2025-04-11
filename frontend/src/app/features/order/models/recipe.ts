@@ -1,6 +1,6 @@
 export interface Ingredient {
   id: number,
-  code: string,
+  code?: string,
   cost?: number,
   name: string,
   outOfStock?: boolean,

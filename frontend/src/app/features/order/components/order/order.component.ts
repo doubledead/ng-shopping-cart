@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { filter, from, Observable} from 'rxjs';
 import { IngredientService } from '../../services/ingredients/ingredient.service';
 import { RecipeService } from '../../services/recipes/recipe.service';
 import { Ingredient, Recipe } from '../../models/recipe';
@@ -26,6 +27,8 @@ export class OrderComponent implements OnInit {
   orders: Order[] = [];
   orderItems: OrderItem[] = [];
   recipes: Recipe[] = [];
+  recipeService = inject(RecipeService);
+  recipes$ = this.recipeService.getRecipes();
 
   // Initialize blank order
   order: Order = {
@@ -105,6 +108,10 @@ export class OrderComponent implements OnInit {
     return this.recipes.find(recipe => recipeId === recipe.id);
   }
 
+  private getRecipeV2(recipeId: number): Observable<Recipe | undefined> {
+    return this.recipes$.pipe(filter(recipe => recipe.id === recipeId) ?? undefined);
+  }
+
   private restockRecipesFull() {
     this.recipes.forEach(recipe => {
       recipe.ingredients.forEach(ingredient => { ingredient.outOfStock = false; });
@@ -167,6 +174,7 @@ export class OrderComponent implements OnInit {
 
   addToOrder(recipeId: number) {
     const recipeOrder = this.getRecipe(recipeId);
+    // const recipeOrder = from(this.getRecipeV2(recipeId));
 
     if (recipeOrder && !recipeOrder.outOfStock) {
       this.updateInventory(recipeOrder);
