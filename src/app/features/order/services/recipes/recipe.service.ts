@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, signal } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Recipe } from '../../models/recipe';
 import { mockRecipesList } from './recipes.mock';
@@ -8,7 +8,11 @@ import { mockRecipesList } from './recipes.mock';
   providedIn: 'root'
 })
 export class RecipeService {
-  url = 'http://localhost:3000';
+  url: string = 'http://localhost:3000';
+
+  readonly recipes = signal<Recipe[]>([]);
+
+  // readonly recipesResource = httpResource<Recipe[]>(() => );
 
   constructor(private http: HttpClient) { }
 
